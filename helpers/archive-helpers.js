@@ -32,6 +32,7 @@ exports.isUrlInList = function(){
 };
 
 exports.addUrlToList = function(){
+  // if !isUrlInList ==> append to sites.txt
 };
 
 exports.isUrlArchived = function(){
