@@ -7,19 +7,18 @@ var file = require('node-static');
 
 var router = {
   "GET": function (request, response) {
+    // TODO: better parsing (not /com/)
     if (/com/.test(request.url)) {
-      fs.exists(request.url, function(exists){
+      fs.exists(path.join(archive.paths.archivedSites, request.url), function(exists){
         if (exists) {
           var archiveServer = new file.Server('./archives/sites');
           archiveServer.serve(request, response);
         }
       });
-    }
-
-    // if (request.url == "/") {
+    } else { 
       var fileServer = new file.Server('./web/public');
       fileServer.serve(request, response);
-    // }
+    }
 
   },
 
