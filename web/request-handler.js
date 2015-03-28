@@ -7,20 +7,44 @@ var file = require('node-static');
 
 var router = {
   "GET": function (request, response) {
-    var fileServer = new file.Server('./web/public');
-    fileServer.serve(request, response);
+    if (/com/.test(request.url)) {
+      fs.exists(request.url, function(exists){
+        if (exists) {
+          var archiveServer = new file.Server('./archives/sites');
+          archiveServer.serve(request, response);
+        }
+      });
+    }
+
+    // if (request.url == "/") {
+      var fileServer = new file.Server('./web/public');
+      fileServer.serve(request, response);
+    // }
+
   },
 
   "POST": function (request, response) {
     request.on('data', function (data) {
       var url=JSON.parse(data).url
       console.log(url)
+      archive.isUrlInList(url)
+      
+      //check sites.txt for url
+        //if doesn't exist, append url to sites.txt
 
+      //check if URL is archived
+        // if it is, serve (/sites/url)
+
+      request.on('end', function(){
+        response.writeHead(201, httpHelper.headers)
+        response.end()
+      })
     });
   },
 
   "OPTIONS": function (request, response) {
-    // handle 201
+    response.writeHead(201, httpHelper.headers)
+    response.end()
   }
 };
 
